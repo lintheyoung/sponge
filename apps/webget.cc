@@ -1,5 +1,5 @@
-#include "socket.hh"
 #include "util.hh"
+#include "socket.hh"
 
 #include <cstdlib>
 #include <iostream>
@@ -7,18 +7,19 @@
 using namespace std;
 
 void get_URL(const string &host, const string &path) {
-    // Your code here.
+	TCPSocket tcpSocket;
 
-    // You will need to connect to the "http" service on
-    // the computer whose name is in the "host" string,
-    // then request the URL path given in the "path" string.
+	tcpSocket.connect(Address(host, "http")); // 创建连接
+    // 实际在shell写入的command
+	tcpSocket.write("GET " + path + " HTTP/1.1\r\n" + "HOST: " + host + "\r\n" + "Connection: close\r\n"); // 继承自FileDescriptor的写方法
+	
+    tcpSocket.shutdown(SHUT_WR); // 告诉服务器我已完成请求
 
-    // Then you'll need to print out everything the server sends back,
-    // (not just one call to read() -- everything) until you reach
-    // the "eof" (end of file).
+	while(!tcpSocket.eof()){ // 读取服务器端返回的数据
+		cout << tcpSocket.read();
+	}
 
-    cerr << "Function called: get_URL(" << host << ", " << path << ").\n";
-    cerr << "Warning: get_URL() has not been implemented yet.\n";
+	tcpSocket.close();
 }
 
 int main(int argc, char *argv[]) {
