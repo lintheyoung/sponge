@@ -110,12 +110,12 @@ bool ByteStream::eof() const{
     return buffer_empty() && input_ended();
 }
 
-// 查看已读
+// 查看已写
 size_t ByteStream::bytes_written() const{
     return this->_write_cnt;
 }
 
-// 已写函数
+// 已读函数
 size_t ByteStream::bytes_read() const{
     return this->_read_cnt;
 }
